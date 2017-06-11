@@ -1,3 +1,21 @@
+/**
+ * This micro-blogging app allows a user to post short updates to a private social media site.
+ * 
+ * A post shows the following information:
+ * 1. The user who posted it
+ * 2. The order in which it was posted
+ * 3. The contents of the post
+ * 4. Optionally, a web address to a site they linked
+ * 
+ * Users have:
+ * 1. The web address (url) to their avatar picture 
+ * 2. The username 
+ * 3. The person's real first name and last name 
+ * 4. The person's email address
+ * 
+ * Every user sees all posts on this private site.
+ */
+
 import java.util.Scanner;
 import static java.lang.System.out;
 import java.util.ArrayList;
@@ -18,6 +36,10 @@ public class Menu
     static String url = "";
     static Post post = new Post(username, number, content, url);
     static ArrayList<Post> posts = new ArrayList<Post>();
+
+    static int lastNumber = -1;
+    static String lastContent = "";
+    static String lastUrl = "";
 
     public static void MicroBlogMenu() {
         out.println();
@@ -123,14 +145,6 @@ public class Menu
 
             number++;
         }
-
-        //         for (int i = 0; i < users.size(); i++) {
-        //             if (i == selection) {
-        //                 out.print(number);
-        //                 posts.add(new Post(username, number, content, url));
-        //                 number++;
-        //             }
-        //         }
     }
 
     public static void PrintUsers() {
@@ -153,15 +167,21 @@ public class Menu
 
     public static void PrintLastPost() {
         if (posts.size() > 0) {
+            int occurrences = 0;
             for (int i = 0; i < posts.size(); i++) {
-                if (username.equals(users.get(selection).getUserName())) {
-                    out.println(posts.get(posts.size()-1).getUsername().toString());
-                    out.println(posts.size()-1);
-                    out.println(posts.get(posts.size()-1).getContent().toString());
-                    out.println(posts.get(posts.size()-1).getURL().toString());
-                    out.println();
-                    break;
+                if (users.get(selection).getUserName().equals(posts.get(i).getUsername())) {
+                    lastNumber = posts.get(i).getNumber();
+                    lastContent = posts.get(i).getContent();
+                    lastUrl = posts.get(i).getURL();
+                    occurrences++;
                 }
+            }
+            if (occurrences > 0) {
+                out.println(users.get(selection).getUserName());
+                out.println(lastNumber);
+                out.println(lastContent);
+                out.println(lastUrl);
+                out.println();
             }
         }
     }
